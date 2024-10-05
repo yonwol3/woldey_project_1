@@ -1,0 +1,51 @@
+---
+title: "project_1 report"
+author: "Yonatan Wolde"
+date: "2024-10-05"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(kableExtra)
+```
+
+
+```{r}
+dat<-read.csv("DataRaw/lead-iq-01.csv")
+```
+
+
+```{r}
+# IQ by location
+ggplot(dat, aes(x=IQ))+
+        geom_histogram(bins = 5)+
+        facet_wrap(~as.factor(Smelter)) 
+        
+```
+
+```{r}
+summary_df <- dat %>%
+  group_by(as.factor(Smelter)) %>%
+  summarise(mean = mean(IQ), sd = sd(IQ))
+colnames(summary_df)<-c("Smelter", "Mean", "Standard deviation")
+kable(summary_df, caption = "Mean and SD of IQ by Group") %>%
+  kable_styling() %>%  
+  add_header_above(c(" ", " Summary Statistics" = 2)) %>%
+  column_spec(column=1:3, width = "1cm")
+       
+```
+
+The Graph and the table show that far smelter has a higher iq on average but more variation compared to near. However, there seems to be an outlier in the far group, that may be influencing the mean, so it must be looked futher. 
+
+in-line calculation for the mean
+```{r}
+IQ_far<-dat %>% filter(Smelter=="Far") %>% select(IQ)
+sum(IQ_far)/nrow(IQ_far)
+
+IQ_near<-dat %>% filter(Smelter=="Near") %>% select(IQ)
+sum(IQ_near)/nrow(IQ_near)
+
+```
+

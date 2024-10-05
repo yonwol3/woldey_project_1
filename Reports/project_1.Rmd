@@ -14,6 +14,7 @@ library(kableExtra)
 
 ```{r}
 dat<-read.csv("DataRaw/lead-iq-01.csv")
+dat[10,2]<-99
 ```
 
 
